@@ -1,0 +1,107 @@
+#include<iostream>
+using namespace std;
+
+bool valid_id(int id){
+    int temp = 0;
+    while(id > 0){
+        temp++;
+        id/=10;
+    }
+    return  temp == 7;
+}
+
+
+void insert(int student_id, int index, int students_list[], int &counter) {
+    
+
+   
+    for (int i = counter; i > index; i--) {
+        students_list[i] = students_list[i - 1];
+    }
+
+
+    students_list[index] = student_id;
+    counter++;
+}
+
+int main() {
+    int choice, student_id, counter = 0, index;
+    int students_list[100];
+    
+
+    do {
+        cout << "\n==== Student ID Manager ====" << endl;
+        cout << "1) Add student" << endl;
+        cout << "2) Insert student" << endl;
+        cout << "3) Delete student" << endl;
+        cout << "4) Sort students by ID" << endl;
+        cout << "5) Display all students" << endl;
+        cout << "6) Exit" << endl;
+
+        cout << "Choose an option: ";
+        cin >> choice;
+
+        switch(choice) {
+            case 1:
+                do {
+                    cout << "Enter student ID: ";
+                    cin >> student_id;
+                    if(!valid_id(student_id))
+                        cout << "Write valid student id example is 1234567" << endl;
+                    else {
+                        students_list[counter++] = student_id;
+                        cout << "Student added." << endl;
+                    }
+                } while (!valid_id(student_id));
+                break;
+
+            case 2:
+                do {
+                    cout << "Enter position: ";
+                    cin >> index;
+                    if (index < 0 || index > counter) {
+                        cout << "Invalid index!\n";
+                        break;
+                    }
+                    cout << "Enter student ID: ";
+                    cin >> student_id;
+                    if(!valid_id(student_id))
+                        cout << "Write valid student id example is 1234567" << endl;
+                    else {
+                        insert(student_id, index, students_list, counter);
+                        cout << "Student inserted." << endl;
+                    }
+                } while (!valid_id(student_id));
+                break;
+
+            case 3:
+                cout << "Enter index to delete: ";
+                cin >> index;
+                if (index < 0 || index > counter) {
+                    cout << "Invalid index!\n";
+                    break;    
+                }
+                else{
+                    students_list
+                }
+                break;
+
+            case 4:
+                
+                break;
+
+            case 5:
+                
+                break;
+
+            case 6:
+                cout << "Thank you! Program ended. \n";
+                break;
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
