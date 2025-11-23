@@ -23,10 +23,31 @@ void insert(int student_id, int index, int students_list[], int &counter) {
     students_list[index] = student_id;
     counter++;
 }
+void bubble_sort(int students_list[], int counter){
+    for (int i = 0; i < counter; i++){
+        for (int j =0; j < (counter - i - 1); j++){
+            if (students_list[j] > students_list[j + 1]) {
+                int temp = students_list[j];
+                students_list[j] = students_list[j + 1];
+                students_list[j + 1] = temp;
+            }
+        }
+    }
+    cout << "Students sorted by ID in ascending order." << endl;
+    
+}
+void show_all(int students_list[], int counter) {
+    cout << "Student IDs:" << endl;
+    for (int i = 0; i < counter; i++) {
+        cout<< "Index " << i <<": " << students_list[i] << endl;
+    }
 
+
+}
 int main() {
     int choice, student_id, counter = 0, index;
     int students_list[100];
+    bool Found = false;
     
 
     do {
@@ -34,9 +55,10 @@ int main() {
         cout << "1) Add student" << endl;
         cout << "2) Insert student" << endl;
         cout << "3) Delete student" << endl;
-        cout << "4) Sort students by ID" << endl;
-        cout << "5) Display all students" << endl;
-        cout << "6) Exit" << endl;
+        cout << "4) Search student" << endl;
+        cout << "5) Sort students by ID" << endl;
+        cout << "6) Display all students" << endl;
+        cout << "7) Exit" << endl;
 
         cout << "Choose an option: ";
         cin >> choice;
@@ -77,171 +99,65 @@ int main() {
             case 3:
                 cout << "Enter index to delete: ";
                 cin >> index;
-                if (index < 0 || index > counter) {
+                
+                if (index < 0 || index >= counter) {
                     cout << "Invalid index!\n";
-                    break;    
+                    break;
                 }
-                else{
-                    students_list
+                    
+                for (int i = index; i < counter - 1; i++) {
+                    students_list[i] = students_list[i + 1];
                 }
+                counter--;
+                cout << "Student deleted." << endl;
                 break;
 
-            case 4:
-                
-                break;
+            case 4:{
+                int CurElem = 0;
+                cout << "Enter ID to search: ";
+                cin >> student_id;
+                if (!valid_id(student_id)){
+                        cout << "Write valid student id example is 1234567" << endl;
+                        break;       
+                }        
+                 while (CurElem < counter && !Found){
+                    if (students_list[CurElem] == student_id){
+                        Found = true;
+                        break;
+                    }
+                    else
+                        CurElem ++;
+                }
+                cout << (Found 
+                    ? "Student with ID " + to_string(student_id) + " found at index " +   to_string(CurElem)
+                    : "Student with ID " + to_string(student_id) + " not found")
+                    << endl;
+                    
 
+                break;
+            }
             case 5:
+                if (counter != 0)
+                    bubble_sort(students_list, counter);
+                else
+                    cout << "Array is now empty!" << endl;
+                break;
                 
+            case 6:
+                if (counter != 0)
+                    show_all(students_list, counter);
+                else
+                    cout << "Array is now empty!" << endl;
                 break;
 
-            case 6:
+            case 7:
                 cout << "Thank you! Program ended. \n";
                 break;
 
             default:
                 cout << "Invalid choice!\n";
         }
-    } while (choice != 6);
+    } while (choice != 7);
 
     return 0;
 }
-
-
-/* 
-#include <iostream>
-#include <string>
-using namespace std;
-
-// Check if ID is valid: 7 digits, no leading zeros
-bool valid_id(const string& id){
-    if (id.length() != 7) return false;
-    if (id[0] == '0') return false;
-    return true;
-}
-
-// Insert student at a specific index
-void insert(int student_id, int index, int students_list[], int &counter) {
-    for (int i = counter; i > index; i--) {
-        students_list[i] = students_list[i - 1];
-    }
-    students_list[index] = student_id;
-    counter++;
-}
-
-// Display all students
-void display(int students_list[], int counter) {
-    if (counter == 0) {
-        cout << "No students to display.\n";
-        return;
-    }
-    cout << "Student IDs: ";
-    for (int i = 0; i < counter; i++) {
-        cout << students_list[i] << " ";
-    }
-    cout << endl;
-}
-
-// Simple bubble sort for student IDs
-void sort_students(int students_list[], int counter) {
-    for (int i = 0; i < counter - 1; i++) {
-        for (int j = 0; j < counter - i - 1; j++) {
-            if (students_list[j] > students_list[j + 1]) {
-                swap(students_list[j], students_list[j + 1]);
-            }
-        }
-    }
-    cout << "Students sorted by ID.\n";
-}
-
-// Delete student at a specific index
-void delete_student(int students_list[], int &counter, int index) {
-    for (int i = index; i < counter - 1; i++) {
-        students_list[i] = students_list[i + 1];
-    }
-    counter--;
-    cout << "Student deleted.\n";
-}
-
-int main() {
-    int choice, student_id, counter = 0, index;
-    int students_list[100];
-
-    do {
-        cout << "\n==== Student ID Manager ====\n";
-        cout << "1) Add student\n";
-        cout << "2) Insert student\n";
-        cout << "3) Delete student\n";
-        cout << "4) Sort students by ID\n";
-        cout << "5) Display all students\n";
-        cout << "6) Exit\n";
-
-        cout << "Choose an option: ";
-        cin >> choice;
-
-        switch(choice) {
-            case 1:
-                do {
-                    cout << "Enter student ID: ";
-                    cin >> student_id;
-                    if(!valid_id(to_string(student_id)))
-                        cout << "Write valid student ID (example: 1234567)\n";
-                    else {
-                        students_list[counter++] = student_id;
-                        cout << "Student added.\n";
-                        break; // exit loop once valid
-                    }
-                } while (true);
-                break;
-
-            case 2:
-                do {
-                    cout << "Enter position (0 to " << counter << "): ";
-                    cin >> index;
-                    if (index < 0 || index > counter) {
-                        cout << "Invalid index!\n";
-                        break;
-                    }
-                    cout << "Enter student ID: ";
-                    cin >> student_id;
-                    if(!valid_id(to_string(student_id))) {
-                        cout << "Write valid student ID (example: 1234567)\n";
-                    } else {
-                        insert(student_id, index, students_list, counter);
-                        cout << "Student inserted.\n";
-                        break; // exit loop once valid
-                    }
-                } while (true);
-                break;
-
-            case 3:
-                cout << "Enter index to delete (0 to " << counter-1 << "): ";
-                cin >> index;
-                if (index < 0 || index >= counter) {
-                    cout << "Invalid index!\n";
-                } else {
-                    delete_student(students_list, counter, index);
-                }
-                break;
-
-            case 4:
-                sort_students(students_list, counter);
-                break;
-
-            case 5:
-                display(students_list, counter);
-                break;
-
-            case 6:
-                cout << "Thank you! Program ended.\n";
-                break;
-
-            default:
-                cout << "Invalid choice!\n";
-        }
-    } while (choice != 6);
-
-    return 0;
-}
-
-
-*/
