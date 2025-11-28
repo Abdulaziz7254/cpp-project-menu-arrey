@@ -55,10 +55,9 @@ void SortArray(int* p, int patient_count) {
     cout << "Array sorted successfully." << endl;
 }
 
-
 void search_patient (int *p, int patient_count, int value_search) {
     bool found_not = true;
-    for (int i = 0; i <= patient_count; i++) {
+    for (int i = 0; i < patient_count; i++) {
             if (value_search == *(p + i)){
                 cout << "Heart rate "<<*(p + i) << " found for patient #" << (i + 1) << endl;
                     found_not = false;
