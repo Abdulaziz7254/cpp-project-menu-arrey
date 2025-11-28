@@ -1,0 +1,72 @@
+//U2510228 BABAJANOV ABDULAZIZ
+#include<iostream>
+using namespace std;
+
+bool patient_valid(int patient_count, int newPatient){
+    return patient_count >= 0 &&
+           newPatient >= 0 &&
+           (patient_count + newPatient) <= 30;
+}
+
+int main() {
+    int option, patientData[30], patient_count = 0;
+
+
+    do {
+        cout << "\n==== HOSPITAL PATIENT MONITORING SYSTEM ====" << endl;
+        cout << "1. Enter patient data" << endl;
+        cout << "2. Display all records" << endl;
+        cout << "3. Analyze data" << endl;
+        cout << "4. Sort patient" << endl;
+        cout << "5. search patient" << endl;
+        cout << "6. Exit" << endl;
+
+        cout << "Choose option: ";
+        cin >> option;
+
+        switch(option) {
+            case 1:
+                int newPatient;
+                do{
+                    cout << "How many patinets? ";
+                    cin >> newPatient;
+                }while(!patient_valid(newPatient, patient_count)); 
+                if (newPatient > 0)
+                    cout << "Invalid input. Please try again." << endl;
+                else if ((newPatient + patient_count) > 30)
+                    cout << "Invalid number of patient" << endl;
+                else (){
+                    for(int i; i <= newPatient; i++){
+                        cout << "Enter " << i <<": ";
+                        cin >> value_of_patient;
+                    }
+                }
+                break;
+
+            case 2:
+                
+                break;
+
+            case 3:
+               
+                break;
+
+            case 4:
+               
+                break;
+            
+            case 5:
+                
+                break;
+
+            case 6:
+                cout << "Thank you! Program ended. \n";
+                break;
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+    } while (option != 6);
+
+    return 0;
+}
