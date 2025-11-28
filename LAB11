@@ -2,14 +2,81 @@
 #include<iostream>
 using namespace std;
 
-bool patient_valid(int patient_count, int newPatient){
-    return patient_count >= 0 &&
-           newPatient >= 0 &&
-           (patient_count + newPatient) <= 30;
+void displayRecords(int *p, int patient_count){
+    if (patient_count == 0)
+        cout << "No valid data entered." << endl;
+    else {
+        for (int i = 0; i < patient_count; i++) {
+            cout << "Patient " << (i + 1) << ": Heart rate = " << *(p + i) << " address = " << (p + i) << endl;
+  
+        }
+    }
 }
 
+void dataAnalyze(int* p, int patient_count) {
+    int sum = *p, temp_max = *p, temp_min = *p;
+    if (patient_count == 0)
+        cout << "No valid data entered." << endl;
+    else {
+        for (int i = 1; i < patient_count; i++) {
+            if (temp_max < *(p + i))
+                temp_max = *(p + i);
+
+            if (temp_min > *(p + i))
+                temp_min = *(p + i);
+            
+            sum += *(p + i);
+        }
+        double avg = (double)sum / patient_count;
+
+        cout << "Maximum heart rate = " << temp_max << endl;
+        cout << "Minimum heart rate = " << temp_min << endl;
+        cout << "Average heart rate = " << avg << endl;
+    }
+}
+
+void SortArray(int* p, int patient_count) {
+    if (patient_count == 0) {
+        cout << "No valid data entered." << endl;
+        return;
+    }
+
+    for (int i = 0; i < patient_count - 1; i++) {
+        for (int j = 0; j < patient_count - 1 - i; j++) {
+
+            if (*(p + j) > *(p + j + 1)) {
+                int temp = *(p + j);
+                *(p + j) = *(p + j + 1);
+                *(p + j + 1) = temp;
+            }
+        }
+    }
+
+    cout << "Array sorted successfully." << endl;
+}
+
+
+void search_patient (int *p, int patient_count, int value_search) {
+    bool found_not = true;
+    for (int i = 0; i <= patient_count; i++) {
+            if (value_search == *(p + i)){
+                cout << "Heart rate "<<*(p + i) << " found for patient #" << (i + 1) << endl;
+                    found_not = false;
+            }
+    }
+    if (found_not) {
+        cout << "No patient found with heart rate " << value_search << endl;
+        }
+    
+}
+
+
+
 int main() {
-    int option, patientData[30], patient_count = 0;
+    int option, patientData[30], patient_count = 0, search_pt;
+    bool logic_error_control = false;
+    int* p = patientData;
+
 
 
     do {
@@ -24,47 +91,74 @@ int main() {
         cout << "Choose option: ";
         cin >> option;
 
-        switch(option) {
-            case 1:
-                int newPatient;
-                do{
-                    cout << "How many patinets? ";
-                    cin >> newPatient;
-                }while(!patient_valid(newPatient, patient_count)); 
-                if (newPatient > 0)
-                    cout << "Invalid input. Please try again." << endl;
-                else if ((newPatient + patient_count) > 30)
-                    cout << "Invalid number of patient" << endl;
-                else (){
-                    for(int i; i <= newPatient; i++){
-                        cout << "Enter " << i <<": ";
-                        cin >> value_of_patient;
-                    }
+        switch (option) {
+        case 1: {
+            int newPatient, value_of_patient;
+
+            do {
+                logic_error_control = false;
+                cout << "How many patients? ";
+                cin >> newPatient;
+
+                if (newPatient + patient_count > 30) {
+                    cout << "Invalid input! Total patients cannot exceed 30.\n";
+                    logic_error_control = true;
                 }
-                break;
 
-            case 2:
-                
-                break;
+                if (newPatient < 0) {
+                    cout << "Invalid number of patients.\n";
+                    logic_error_control = true;
+                }
 
-            case 3:
-               
-                break;
+            } while (logic_error_control);
 
-            case 4:
-               
-                break;
+            cout << "Enter heart rate for each patient:\n";
+
+            for (int i = 0; i < newPatient; i++) {
+
+                do {
+                    cout << "Patient " << (patient_count + 1) << ": ";
+                    cin >> value_of_patient;
+
+                    if (value_of_patient < 0)
+                        cout << "Invalid value! Must be >= 0.\n";
+
+                } while (value_of_patient < 0);
+
+                *(p + patient_count) = value_of_patient;
+                patient_count++;
+            }
+            cout << "Patient data entred successfully." << endl;
+            break;
+        }
+
+        case 2:
+            cout << "--- Patients Records ---" << endl;
+            displayRecords(p, patient_count);
+            break;
+
+        case 3:
+            cout << "--- Data analyze ---" << endl;
+            dataAnalyze(p, patient_count);
+            break;
+
+        case 4:
+            SortArray(p, patient_count);
             
-            case 5:
-                
-                break;
+            break;
 
-            case 6:
-                cout << "Thank you! Program ended. \n";
-                break;
+        case 5:
+            cout << "Enter heart to search: ";
+            cin >> search_pt;
+            search_patient(p, patient_count, search_pt);
+            break;
 
-            default:
-                cout << "Invalid choice!\n";
+        case 6:
+            cout << "Thank you! Program ended. \n";
+            break;
+
+        default:
+            cout << "Invalid choice!\n";
         }
     } while (option != 6);
 
